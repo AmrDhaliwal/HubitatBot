@@ -13,7 +13,7 @@
 				"Gruntfuggly.todo-tree"
 			]
 		}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -27,7 +27,7 @@
 	// }
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "dotnet restore",
+	"postCreateCommand": "dotnet restore"
 
 	// Configure tool-specific properties.
 	// "customizations": {},

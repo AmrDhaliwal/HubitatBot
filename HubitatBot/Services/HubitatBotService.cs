@@ -19,9 +19,9 @@ public sealed class HubitatBotService : IHostedService
         this._config = config;
         this._discordClient = new(new()
         {
-            Token = config.GetValue<string>("Bot:Token"),
+            Token = this._config.GetValue<string>("Bot:Token"),
             TokenType = TokenType.Bot,
-            Intents = DiscordIntents.AllUnprivileged
+            Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
         });
     }
 
@@ -29,6 +29,11 @@ public sealed class HubitatBotService : IHostedService
     {
         await _discordClient.ConnectAsync();
         // Other startup things here
+        this._discordClient.MessageCreated += async (s, e) =>
+        {
+            if (e.Message.Content.StartsWith("!ping", StringComparison.CurrentCultureIgnoreCase))
+                await e.Message.RespondAsync("pong!");
+        };
         this._logger.LogInformation("{Name} started successfully.", this.GetType().Name);
     }
 
