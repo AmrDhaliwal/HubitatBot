@@ -1,7 +1,11 @@
+using System.Reflection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using DSharpPlus;
 using Microsoft.Extensions.Configuration;
+using DSharpPlus;
+using DSharpPlus.Commands;
+using DSharpPlus.Commands.Processors.TextCommands;
+using DSharpPlus.Commands.Processors.SlashCommands;
 
 namespace HubitatBot;
 
@@ -11,29 +15,37 @@ public sealed class HubitatBotService : IHostedService
     private readonly IHostApplicationLifetime _applicationLifetime;
     private readonly DiscordClient _discordClient;
     private readonly IConfiguration _config;
+    private readonly IServiceProvider _serviceProvider;
 
-    public HubitatBotService(ILogger<HubitatBotService> logger, IHostApplicationLifetime applicationLifetime, IConfiguration config)
+    public HubitatBotService(ILogger<HubitatBotService> logger, IHostApplicationLifetime applicationLifetime, IConfiguration config, IServiceProvider serviceProvider)
     {
         this._logger = logger;
         this._applicationLifetime = applicationLifetime;
         this._config = config;
+        this._serviceProvider = serviceProvider;
         this._discordClient = new(new()
         {
             Token = this._config.GetValue<string>("Bot:Token"),
             TokenType = TokenType.Bot,
-            Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
+            Intents = DiscordIntents.All
         });
     }
 
     public async Task StartAsync(CancellationToken token)
     {
-        await _discordClient.ConnectAsync();
-        // Other startup things here
-        this._discordClient.MessageCreated += async (s, e) =>
+        // Register Discord commands to bot.
+        Assembly currentAssembly = typeof(Program).Assembly;
+        CommandsExtension extension = this._discordClient.UseCommands(new()
         {
-            if (e.Message.Content.StartsWith("!ping", StringComparison.CurrentCultureIgnoreCase))
-                await e.Message.RespondAsync("pong!");
-        };
+            DebugGuildId = this._config.GetValue<ulong>("Bot:Debug_Guild_Id", 0),
+            ServiceProvider = this._serviceProvider,
+        });
+        await extension.AddProcessorAsync(new TextCommandProcessor());
+        await extension.AddProcessorAsync(new SlashCommandProcessor());
+        extension.AddCommands(currentAssembly);
+
+        // Start Discord Bot connection.
+        await _discordClient.ConnectAsync();
         this._logger.LogInformation("{Name} started successfully.", this.GetType().Name);
     }
 

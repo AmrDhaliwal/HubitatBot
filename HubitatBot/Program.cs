@@ -4,11 +4,12 @@ using Microsoft.Extensions.Hosting;
 using HubitatBot;
 
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+// Add HubitatBotService to HostApplicationBuilder.
 builder.Services.AddHostedService<HubitatBotService>();
-
-IHost host = builder.Build();
+using IHost host = builder.Build();
 
 // Ask the service provider for the configuration abstraction.
 IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
 
+// Start application.
 await host.RunAsync();
