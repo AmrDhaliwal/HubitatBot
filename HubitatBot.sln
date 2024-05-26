@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubitatBot", "HubitatBot\HubitatBot.csproj", "{2D6A3C4D-5AAE-4154-81EF-79467A1AAEFB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HubitatBot.Hub", "HubitatBot.Hub\HubitatBot.Hub.csproj", "{A64DDBA3-7798-4C3E-80A2-D4846AAED5BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{2D6A3C4D-5AAE-4154-81EF-79467A1AAEFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D6A3C4D-5AAE-4154-81EF-79467A1AAEFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D6A3C4D-5AAE-4154-81EF-79467A1AAEFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A64DDBA3-7798-4C3E-80A2-D4846AAED5BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A64DDBA3-7798-4C3E-80A2-D4846AAED5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A64DDBA3-7798-4C3E-80A2-D4846AAED5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A64DDBA3-7798-4C3E-80A2-D4846AAED5BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
