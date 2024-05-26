@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using DSharpPlus;
 using DSharpPlus.Commands;
-using DSharpPlus.Commands.Processors.TextCommands;
 using DSharpPlus.Commands.Processors.SlashCommands;
 
 namespace HubitatBot;
@@ -40,9 +39,8 @@ public sealed class HubitatBotService : IHostedService
             DebugGuildId = this._config.GetValue<ulong>("Bot:Debug_Guild_Id", 0),
             ServiceProvider = this._serviceProvider,
         });
-        await extension.AddProcessorAsync(new TextCommandProcessor());
         await extension.AddProcessorAsync(new SlashCommandProcessor());
-        extension.AddCommands(currentAssembly);
+        extension.AddCommands(currentAssembly, this._config.GetValue<ulong>("Bot:Debug_Guild_Id", 0));
 
         // Start Discord Bot connection.
         await _discordClient.ConnectAsync();
