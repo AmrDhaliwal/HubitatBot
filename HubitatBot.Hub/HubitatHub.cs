@@ -1,27 +1,30 @@
-﻿namespace HubitatBot.Hub;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
 
-public class HubitatHub
+namespace HubitatBot.Hub;
+
+public sealed class HubitatHub(IHttpClientFactory httpClientFactory, string host, string token, int appId) : BaseHubitatHub
 {
-    private string _hub_mac;
-    private string _host;
-    private string _token;
-    private int _maker_app_id;
-    private string? _cloud_token = null;
-    private string _base_url;
-    public HubitatHub(string hub_mac, string host, string token, int maker_app_id, string? cloud_token=null)
+    private IHttpClientFactory HttpClient { get; } = httpClientFactory;
+    private readonly string _host = host;
+    private readonly string _token = token;
+    private readonly int _appId = appId;
+    private readonly string _base_uri = host + "/apps/api/" + appId + "/devices/";
+    public async Task<string> GetDevices()
     {
-        this._hub_mac = hub_mac;
-        this._host = host;
-        this._token = token;
-        this._maker_app_id = maker_app_id;
-        if (cloud_token is not null)
+        var client = this.HttpClient.CreateClient();
+        try
         {
-            this._cloud_token = cloud_token;
-            this._base_url = this._host + "/api/" + this._cloud_token + "/apps/" + this._maker_app_id + "/devices";
+            var response = await client.GetStringAsync(
+                $"{this._base_uri}/all?access_token={this._token}");
+            return response ?? "";
         }
-        else
+        catch (Exception ex)
         {
-            this._base_url = this._host + "/apps/api/" + "/apps/" + this._maker_app_id + "/devices";
+            return ex.Message;
         }
+    }
+    public override void Dispose()
+    {
     }
 }
