@@ -10,6 +10,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="Refit" />
+    <PackageReference Include="Refit.HttpClientFactory" />
     <PackageReference Include="System.Net.Http" />
     <PackageReference Include="System.Text.Json" />
   </ItemGroup>
